@@ -1,6 +1,7 @@
 {
   "name": "elizaveta-portfolio",
   "version": "1.0.0",
+  "type": "module",
   "description": "Professional portfolio website for Elizaveta - Designer & Digital Artist",
   "main": "server.js",
   "scripts": {

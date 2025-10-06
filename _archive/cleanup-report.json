@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "Протестируйте проект: npm run dev",
+    "Проверьте сборку: npm run build",
+    "Запустите тесты: npm run test",
+    "Архив можно удалить через месяц если проект стабилен"
+  ],
+  "summary": {
+    "moved": 17,
+    "totalProcessed": 30,
+    "removed": 13,
+    "errors": 0
+  },
+  "timestamp": "2025-10-06T08:38:13Z"
+}
