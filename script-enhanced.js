@@ -690,7 +690,6 @@ if (contactForm) {
   const formGroups = document.querySelectorAll('.form-group');
   formGroups.forEach(group => {
     const input = group.querySelector('input, textarea');
-    const placeholder = input.getAttribute('placeholder');
 
     input.addEventListener('focus', () => {
       group.classList.add('focused');

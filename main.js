@@ -4,9 +4,9 @@
  */
 
 import { CoreModule } from './modules/core.js';
-import { PerformanceModule } from './modules/performance.js';
-import { MediaModule } from './modules/media-optimized.js';
 import { LibraryLoader } from './modules/library-loader.js';
+import { MediaModule } from './modules/media-optimized.js';
+import { PerformanceModule } from './modules/performance.js';
 import { Utils } from './modules/utils.js';
 
 class PortfolioApp {
@@ -78,7 +78,7 @@ class PortfolioApp {
   /**
    * Инициализация критических модулей
    */
-  async initCriticalModules(capabilities) {
+  async initCriticalModules() {
     // Core Module - всегда нужен
     const core = new CoreModule();
     this.modules.set('core', core);
@@ -207,7 +207,7 @@ class PortfolioApp {
   sendErrorToMonitoring(type, error) {
     // Здесь можно интегрировать с Sentry, LogRocket и т.д.
     if (window.gtag) {
-      gtag('event', 'exception', {
+      window.gtag('event', 'exception', {
         description: `${type}: ${error.message || error}`,
         fatal: false
       });

@@ -8,9 +8,14 @@ function getMcpServerPath() {
   const isWindows = os.platform() === 'win32';
   const npmGlobalPath = process.env.APPDATA
     ? path.join(process.env.APPDATA, 'npm')
-    : path.join(os.homedir(), isWindows ? 'AppData/Roaming/npm' : '.npm-global/bin');
+    : path.join(
+        os.homedir(),
+        isWindows ? 'AppData/Roaming/npm' : '.npm-global/bin'
+      );
 
-  const executable = isWindows ? 'mcp-server-filesystem.cmd' : 'mcp-server-filesystem';
+  const executable = isWindows
+    ? 'mcp-server-filesystem.cmd'
+    : 'mcp-server-filesystem';
   return path.join(npmGlobalPath, executable);
 }
 

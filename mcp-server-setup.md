@@ -59,6 +59,7 @@ To stop the MCP Filesystem Server, use the provided batch script:
 ```
 
 This script will:
+
 1. Attempt to stop the MCP Filesystem Server executable
 2. If not found, check for and stop Node.js processes running the server
 3. Provide clear feedback on the operation status
@@ -68,30 +69,39 @@ This script will:
 After installation, you can verify the setup using the provided test scripts:
 
 ### 1. Verify Installation
+
 ```bash
 node verify-mcp-server.js
 ```
+
 This script checks:
+
 - If the MCP server executable exists
 - If the package is installed globally
 - If any server processes are running
 
 ### 2. Simple Test
+
 ```bash
 node simple-mcp-test.js
 ```
+
 Runs a basic test to ensure the server can start.
 
 ### 3. Request Test
+
 ```bash
 node test-mcp-request.js
 ```
+
 Sends a JSON-RPC request to test server functionality.
 
 ### 4. Interactive Client Test
+
 ```bash
 node mcp-client-test.js
 ```
+
 Provides an interactive menu to test various server operations.
 
 ## Troubleshooting
@@ -133,6 +143,7 @@ The MCP Filesystem Server can be integrated with various tools and frameworks:
 ## Script Improvements
 
 All test scripts have been updated to:
+
 - **Dynamically resolve paths**: No more hardcoded user-specific paths
 - **Cross-platform support**: Works on Windows, Linux, and macOS
 - **Better error handling**: Clearer error messages and status reporting
@@ -147,6 +158,7 @@ All test scripts have been updated to:
 ## Changelog
 
 ### Version 2.0 (Current)
+
 - Fixed hardcoded paths in all test scripts
 - Added dynamic path resolution for cross-platform compatibility
 - Improved stop-mcp-server.bat with better status reporting

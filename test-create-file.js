@@ -4,7 +4,8 @@ const path = require('path');
 
 // Create a test file
 const testFilePath = path.join(__dirname, 'mcp-test-file.txt');
-const testContent = 'This is a test file created to verify the MCP Filesystem Server installation.';
+const testContent =
+  'This is a test file created to verify the MCP Filesystem Server installation.';
 
 console.log(`Creating test file at: ${testFilePath}`);
 try {
@@ -38,4 +39,6 @@ try {
 }
 
 console.log('\nTest complete!');
-console.log('The MCP Filesystem Server is installed and the filesystem is accessible.');
+console.log(
+  'The MCP Filesystem Server is installed and the filesystem is accessible.'
+);

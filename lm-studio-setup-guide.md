@@ -7,12 +7,14 @@ This guide helps you configure LM Studio to work properly with Blackbox AI by en
 ## The Error Explained
 
 **Error Message:**
+
 ```
-Please check the LM Studio developer logs to debug what went wrong. 
+Please check the LM Studio developer logs to debug what went wrong.
 You may need to load the model with a larger context length to work with blackbox's prompts.
 ```
 
 **What it means:**
+
 - Blackbox AI sends detailed prompts that include system instructions, file contents, project context, and conversation history
 - These prompts can be very large (10K-50K+ tokens)
 - If your LM Studio model has insufficient context length, it cannot process these prompts
@@ -26,21 +28,25 @@ Select a model with adequate context length:
 #### Recommended Models (by context size):
 
 **Small Context (4K-8K tokens)** - ❌ NOT RECOMMENDED for Blackbox
+
 - Most 7B models with standard context
 - Will fail with complex projects
 
 **Medium Context (16K-32K tokens)** - ✅ MINIMUM RECOMMENDED
+
 - Mistral 7B Instruct v0.2 (32K)
 - Llama 2 13B Chat (16K extended)
 - OpenHermes 2.5 Mistral 7B (32K)
 
 **Large Context (64K-128K tokens)** - ✅ IDEAL for Blackbox
+
 - Mistral 7B Instruct v0.3 (128K)
 - Llama 3 8B Instruct (128K)
 - Yi 34B Chat (200K)
 - Qwen 14B Chat (128K)
 
 **Extra Large Context (200K+ tokens)** - ✅ BEST for large projects
+
 - Claude-style models with extended context
 - Specialized long-context fine-tunes
 
@@ -58,6 +64,7 @@ Select a model with adequate context length:
 1. After loading the model, click the **"⚙️ Settings"** icon
 2. Find the **"Context Length"** or **"Max Context"** setting
 3. Set it to the **maximum supported by your model**:
+
    ```
    For 32K models: Set to 32768
    For 64K models: Set to 65536
@@ -120,6 +127,7 @@ Create a file named `blackbox-lm-studio-config.json`:
 #### Test 1: Check Server Status
 
 Open your browser and navigate to:
+
 ```
 http://localhost:1234/v1/models
 ```
@@ -131,14 +139,14 @@ You should see a JSON response listing your loaded model.
 Create a test file `test-lm-studio.js`:
 
 ```javascript
-const fetch = require('node-fetch');
+const fetch = require('node-fetch')
 
 async function testLMStudio() {
   try {
     const response = await fetch('http://localhost:1234/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'your-model-name',
@@ -148,20 +156,21 @@ async function testLMStudio() {
         max_tokens: 100,
         temperature: 0.7
       })
-    });
+    })
 
-    const data = await response.json();
-    console.log('✅ LM Studio is working!');
-    console.log('Response:', data.choices[0].message.content);
+    const data = await response.json()
+    console.log('✅ LM Studio is working!')
+    console.log('Response:', data.choices[0].message.content)
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('❌ Error:', error.message)
   }
 }
 
-testLMStudio();
+testLMStudio()
 ```
 
 Run it:
+
 ```bash
 node test-lm-studio.js
 ```
@@ -169,6 +178,7 @@ node test-lm-studio.js
 #### Test 3: Check Context Length
 
 In LM Studio's server logs, you should see:
+
 ```
 Model loaded with context length: 32768
 ```
@@ -178,6 +188,7 @@ Model loaded with context length: 32768
 #### Problem: "Context length exceeded" error
 
 **Solution:**
+
 1. Load a model with larger context (64K or 128K)
 2. Increase the context length setting in LM Studio
 3. Reduce the amount of context Blackbox sends (if possible)
@@ -185,6 +196,7 @@ Model loaded with context length: 32768
 #### Problem: "Connection refused" or "Cannot connect to LM Studio"
 
 **Solution:**
+
 1. Ensure LM Studio server is running (green indicator in LM Studio)
 2. Check the port number (default: 1234)
 3. Verify firewall isn't blocking localhost connections
@@ -193,6 +205,7 @@ Model loaded with context length: 32768
 #### Problem: "Out of memory" or crashes
 
 **Solution:**
+
 1. Reduce GPU layers in LM Studio settings
 2. Use a smaller model (e.g., 7B instead of 13B)
 3. Reduce context length (but keep above 16K for Blackbox)
@@ -202,6 +215,7 @@ Model loaded with context length: 32768
 #### Problem: Very slow responses
 
 **Solution:**
+
 1. Increase GPU layers (if you have VRAM available)
 2. Use a smaller model
 3. Enable Flash Attention if available
@@ -211,6 +225,7 @@ Model loaded with context length: 32768
 #### Problem: Model gives poor quality responses
 
 **Solution:**
+
 1. Try a different model (some work better with Blackbox prompts)
 2. Adjust temperature (0.7 is usually good)
 3. Ensure you're using an instruction-tuned model (not base model)
@@ -219,6 +234,7 @@ Model loaded with context length: 32768
 ### 6. Recommended Settings by Hardware
 
 #### Low-End System (8GB RAM, No GPU or <6GB VRAM)
+
 ```
 Model: Mistral 7B Instruct (Q4 quantization)
 Context Length: 16384
@@ -227,6 +243,7 @@ Expected Speed: 2-5 tokens/sec
 ```
 
 #### Mid-Range System (16GB RAM, 8-12GB VRAM)
+
 ```
 Model: Mistral 7B Instruct v0.3 (Q5 quantization)
 Context Length: 32768
@@ -235,6 +252,7 @@ Expected Speed: 15-30 tokens/sec
 ```
 
 #### High-End System (32GB+ RAM, 16GB+ VRAM)
+
 ```
 Model: Llama 3 8B Instruct or Yi 34B (Q5/Q6 quantization)
 Context Length: 65536-131072
@@ -266,18 +284,21 @@ Configure these in Blackbox AI settings instead of LM Studio.
 ## Quick Reference
 
 ### Minimum Requirements for Blackbox AI
+
 - ✅ Context Length: 16K+ (32K+ recommended)
 - ✅ Model Type: Instruction-tuned
 - ✅ Server: OpenAI-compatible API
 - ✅ Connection: http://localhost:1234/v1
 
 ### Recommended Models
+
 1. Mistral 7B Instruct v0.3 (128K context)
 2. Llama 3 8B Instruct (128K context)
 3. OpenHermes 2.5 Mistral (32K context)
 4. Yi 34B Chat (200K context)
 
 ### Common Issues Checklist
+
 - [ ] Is LM Studio server running?
 - [ ] Is context length ≥16K?
 - [ ] Is the model instruction-tuned?
