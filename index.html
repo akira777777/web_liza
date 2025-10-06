@@ -31,7 +31,7 @@
     <link rel="preload" href="main-browser.js" as="script">
     <link rel="preload" href="modules/gallery-browser.js" as="script">
     <link rel="preload" href="assets/images/portfolio/3d-composition.jpg" as="image" data-fetchpriority="high">
-    <link rel="preload" href="assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651.jpg" as="image" data-fetchpriority="high" media="(min-width: 768px)">
+    <link rel="preload" href="assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651.svg" as="image" data-fetchpriority="high" media="(min-width: 768px)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -198,7 +198,7 @@
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="nav-controls">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <i class="fas fa-moon"></i>
                 </button>
                 <div class="hamburger">
@@ -296,13 +296,13 @@
 
             <!-- Portfolio Filters -->
             <div class="portfolio-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="branding">Branding</button>
-                <button class="filter-btn" data-filter="3d">3D Art</button>
-                <button class="filter-btn" data-filter="digital">Digital Art</button>
-                <button class="filter-btn" data-filter="abstract">Abstract</button>
-                <button class="filter-btn" data-filter="typography">Typography</button>
-                <button class="filter-btn" data-filter="print">Print Design</button>
+                <button type="button" class="filter-btn active" data-filter="all">All</button>
+                <button type="button" class="filter-btn" data-filter="branding">Branding</button>
+                <button type="button" class="filter-btn" data-filter="3d">3D Art</button>
+                <button type="button" class="filter-btn" data-filter="digital">Digital Art</button>
+                <button type="button" class="filter-btn" data-filter="abstract">Abstract</button>
+                <button type="button" class="filter-btn" data-filter="typography">Typography</button>
+                <button type="button" class="filter-btn" data-filter="print">Print Design</button>
             </div>
 
             <div class="portfolio-masonry">
@@ -314,9 +314,7 @@
                                 <source type="image/webp"
                                     srcset="assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651-sm.webp 400w, assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651-md.webp 800w, assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651.webp 896w"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw">
-                                <img src="assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651.jpg"
-                                    srcset="assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651-sm.jpg 400w, assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651-md.jpg 800w, assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651.jpg 896w"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+                                <img src="assets/images/portfolio/freepik__subtle-variation-of-the-previous-electronic-music-__38651.svg"
                                     alt="DRICTILE - Abstract Fluid Typography Poster with Metallic Teal and Purple Gradients"
                                     loading="eager"
                                     data-fetchpriority="high"
@@ -343,9 +341,7 @@
                                 <source type="image/webp"
                                     srcset="assets/images/portfolio/freepik__upload__96336-sm.webp 400w, assets/images/portfolio/freepik__upload__96336-md.webp 800w, assets/images/portfolio/freepik__upload__96336.webp 1200w"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 30vw">
-                                <img src="assets/images/portfolio/freepik__upload__96336.jpg"
-                                    srcset="assets/images/portfolio/freepik__upload__96336-sm.jpg 400w, assets/images/portfolio/freepik__upload__96336-md.jpg 800w, assets/images/portfolio/freepik__upload__96336.jpg 1200w"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 30vw"
+                                <img src="assets/images/portfolio/freepik__upload__96336.svg"
                                     alt="3D Purple Spheres on Metallic Mesh - Chrome and Purple Digital Art"
                                     loading="eager"
                                     data-fetchpriority="high"
@@ -371,9 +367,7 @@
                                 <source type="image/webp"
                                     srcset="assets/images/portfolio/freepik__upload__96337-sm.webp 400w, assets/images/portfolio/freepik__upload__96337-md.webp 800w, assets/images/portfolio/freepik__upload__96337.webp 1122w"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 30vw">
-                                <img src="assets/images/portfolio/freepik__upload__96337.jpg"
-                                    srcset="assets/images/portfolio/freepik__upload__96337-sm.jpg 400w, assets/images/portfolio/freepik__upload__96337-md.jpg 800w, assets/images/portfolio/freepik__upload__96337.jpg 1122w"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 30vw"
+                                <img src="assets/images/portfolio/freepik__upload__96337.svg"
                                     alt="EFEST Electronic Music Festival Poster - Purple Edition with 3D Element"
                                     loading="eager"
                                     data-fetchpriority="high"
@@ -953,7 +947,7 @@
     </div>
 
     <!-- Back to Top Button -->
-    <button class="back-to-top" id="back-to-top" aria-label="Вернуться наверх">
+    <button type="button" class="back-to-top" id="back-to-top" aria-label="Вернуться наверх">
         <i class="fas fa-arrow-up"></i>
     </button>
 
@@ -971,9 +965,7 @@
     </footer>
 
     <!-- Enhanced Scripts -->
-    <!-- Browser Compatible Modules (No ES6 imports) -->
-    <script src="modules/gallery-browser.js"></script>
-    <script src="modules/forms-browser.js"></script>
+    <!-- Browser Compatible Main Script (loads modules dynamically) -->
     <script src="main-browser.js"></script>
 
     <!-- Health Check для диагностики -->

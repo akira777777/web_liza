@@ -3,69 +3,68 @@
  * Модуль форм для портфолио без ES6 импортов
  */
 
-(function (window) {
-  'use strict';
+;(function (window) {
+  'use strict'
 
   class PortfolioForms {
     constructor() {
-      this.forms = [];
-      this.isInitialized = false;
+      this.forms = []
+      this.isInitialized = false
 
-      this.init();
+      this.init()
     }
 
     init() {
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.initForms());
+        document.addEventListener('DOMContentLoaded', () => this.initForms())
       } else {
-        this.initForms();
+        this.initForms()
       }
     }
 
     initForms() {
       try {
         // Находим все формы на странице
-        const formElements = document.querySelectorAll('form');
-        
+        const formElements = document.querySelectorAll('form')
+
         if (formElements.length === 0) {
-          return;
+          return
         }
 
         // Инициализируем каждую форму
         formElements.forEach((form, index) => {
-          this.initSingleForm(form, index);
-        });
+          this.initSingleForm(form, index)
+        })
 
-        this.isInitialized = true;
-
+        this.isInitialized = true
       } catch (error) {
         // Ошибка не критична для форм
       }
     }
 
     initSingleForm(form, index) {
-      const formId = form.id || `form-${index}`;
-      
+      const formId = form.id || `form-${index}`
+
       const formConfig = {
         id: formId,
         element: form,
         fields: this.getFormFields(form),
         isSubmitting: false
-      };
+      }
 
       // Настраиваем валидацию
-      this.setupValidation(formConfig);
-      
-      // Настраиваем отправку
-      this.setupSubmission(formConfig);
+      this.setupValidation(formConfig)
 
-      this.forms.push(formConfig);
+      // Настраиваем отправку
+      this.setupSubmission(formConfig)
+
+      this.forms.push(formConfig)
     }
 
     getFormFields(form) {
-      const fields = [];
-      const inputs = form.querySelectorAll('input, textarea, select');
-      
+      const fields = []
+      const inputs = form.querySelectorAll('input, textarea, select')
+
       inputs.forEach(input => {
         fields.push({
           element: input,
@@ -73,147 +72,161 @@
           type: input.type,
           required: input.required,
           value: input.value
-        });
-      });
+        })
+      })
 
-      return fields;
+      return fields
     }
 
     setupValidation(formConfig) {
       formConfig.fields.forEach(field => {
         if (field.required) {
           field.element.addEventListener('blur', () => {
-            this.validateField(field);
-          });
+            this.validateField(field)
+          })
         }
-      });
+      })
     }
 
     setupSubmission(formConfig) {
-      formConfig.element.addEventListener('submit', (e) => {
-        e.preventDefault();
-        this.handleSubmit(formConfig);
-      });
+      formConfig.element.addEventListener('submit', e => {
+        e.preventDefault()
+        this.handleSubmit(formConfig)
+      })
     }
 
     validateField(field) {
-      const value = field.element.value.trim();
-      let isValid = true;
+      const value = field.element.value.trim()
+      let isValid = true
 
       // Проверяем обязательные поля
       if (field.required && !value) {
-        isValid = false;
+        isValid = false
       }
 
       // Проверяем email
       if (field.type === 'email' && value) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        isValid = emailRegex.test(value);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        isValid = emailRegex.test(value)
       }
 
       // Добавляем/убираем класс ошибки
       if (isValid) {
-        field.element.classList.remove('error');
+        field.element.classList.remove('error')
       } else {
-        field.element.classList.add('error');
+        field.element.classList.add('error')
       }
 
-      return isValid;
+      return isValid
     }
 
     validateForm(formConfig) {
-      let isValid = true;
+      let isValid = true
 
       formConfig.fields.forEach(field => {
         if (!this.validateField(field)) {
-          isValid = false;
+          isValid = false
         }
-      });
+      })
 
-      return isValid;
+      return isValid
     }
 
     async handleSubmit(formConfig) {
-      if (formConfig.isSubmitting) return;
+      if (formConfig.isSubmitting) return
 
       // Валидируем форму
       if (!this.validateForm(formConfig)) {
-        this.showMessage(formConfig.element, 'Пожалуйста, исправьте ошибки в форме', 'error');
-        return;
+        this.showMessage(
+          formConfig.element,
+          'Пожалуйста, исправьте ошибки в форме',
+          'error'
+        )
+        return
       }
 
-      formConfig.isSubmitting = true;
-      
+      formConfig.isSubmitting = true
+
       // Показываем загрузку
-      this.showLoading(formConfig.element, true);
+      this.showLoading(formConfig.element, true)
 
       try {
         // Имитируем отправку (можно заменить на реальный запрос)
-        await this.simulateSubmission(formConfig);
-        
-        this.showMessage(formConfig.element, 'Сообщение успешно отправлено!', 'success');
-        formConfig.element.reset();
+        await this.simulateSubmission(formConfig)
 
+        this.showMessage(
+          formConfig.element,
+          'Сообщение успешно отправлено!',
+          'success'
+        )
+        formConfig.element.reset()
       } catch (error) {
-        this.showMessage(formConfig.element, 'Произошла ошибка при отправке', 'error');
+        this.showMessage(
+          formConfig.element,
+          'Произошла ошибка при отправке',
+          'error'
+        )
       } finally {
-        formConfig.isSubmitting = false;
-        this.showLoading(formConfig.element, false);
+        formConfig.isSubmitting = false
+        this.showLoading(formConfig.element, false)
       }
     }
 
     simulateSubmission(formConfig) {
-      return new Promise((resolve) => {
-        setTimeout(resolve, 1000); // Имитируем задержку сети
-      });
+      return new Promise(resolve => {
+        setTimeout(resolve, 1000) // Имитируем задержку сети
+      })
     }
 
     showLoading(form, show) {
-      const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
-      
+      const submitButton = form.querySelector(
+        'button[type="submit"], input[type="submit"]'
+      )
+
       if (submitButton) {
         if (show) {
-          submitButton.disabled = true;
-          submitButton.dataset.originalText = submitButton.textContent;
-          submitButton.textContent = 'Отправка...';
+          submitButton.disabled = true
+          submitButton.dataset.originalText = submitButton.textContent
+          submitButton.textContent = 'Отправка...'
         } else {
-          submitButton.disabled = false;
-          submitButton.textContent = submitButton.dataset.originalText || 'Отправить';
+          submitButton.disabled = false
+          submitButton.textContent =
+            submitButton.dataset.originalText || 'Отправить'
         }
       }
     }
 
     showMessage(form, message, type) {
       // Удаляем предыдущие сообщения
-      const existingMessage = form.querySelector('.form-message');
+      const existingMessage = form.querySelector('.form-message')
       if (existingMessage) {
-        existingMessage.remove();
+        existingMessage.remove()
       }
 
       // Создаем новое сообщение
-      const messageEl = document.createElement('div');
-      messageEl.className = `form-message form-message--${type}`;
-      messageEl.textContent = message;
+      const messageEl = document.createElement('div')
+      messageEl.className = `form-message form-message--${type}`
+      messageEl.textContent = message
 
       // Добавляем стили
-      this.addMessageStyles();
+      this.addMessageStyles()
 
       // Вставляем сообщение
-      form.appendChild(messageEl);
+      form.appendChild(messageEl)
 
       // Автоудаление через 5 секунд
       setTimeout(() => {
         if (messageEl.parentElement) {
-          messageEl.remove();
+          messageEl.remove()
         }
-      }, 5000);
+      }, 5000)
     }
 
     addMessageStyles() {
-      if (document.getElementById('forms-styles')) return;
+      if (document.getElementById('forms-styles')) return
 
-      const styles = document.createElement('style');
-      styles.id = 'forms-styles';
+      const styles = document.createElement('style')
+      styles.id = 'forms-styles'
       styles.textContent = `
         .form-message {
           margin-top: 1rem;
@@ -243,29 +256,28 @@
           border-color: #dc3545;
           box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         }
-      `;
+      `
 
-      document.head.appendChild(styles);
+      document.head.appendChild(styles)
     }
 
     // Публичные методы
     cleanup() {
       this.forms.forEach(formConfig => {
         formConfig.fields.forEach(field => {
-          field.element.classList.remove('error');
-        });
-      });
+          field.element.classList.remove('error')
+        })
+      })
 
-      const styles = document.getElementById('forms-styles');
+      const styles = document.getElementById('forms-styles')
       if (styles) {
-        styles.remove();
+        styles.remove()
       }
 
-      this.forms = [];
+      this.forms = []
     }
   }
 
   // Экспортируем в глобальную область видимости
-  window.PortfolioForms = PortfolioForms;
-
-})(window);
+  window.PortfolioForms = PortfolioForms
+})(window)

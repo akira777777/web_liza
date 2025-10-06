@@ -3,122 +3,125 @@
  * Модуль галереи для портфолио без ES6 импортов
  */
 
-(function (window) {
-  'use strict';
+;(function (window) {
+  'use strict'
 
   class PortfolioGallery {
     constructor() {
-      this.galleries = [];
-      this.currentGallery = null;
-      this.isInitialized = false;
+      this.galleries = []
+      this.currentGallery = null
+      this.isInitialized = false
 
-      this.init();
+      this.init()
     }
 
     init() {
-      console.log('🖼️ Gallery module initializing...');
-      
+      console.log('🖼️ Gallery module initializing...')
+
       // Инициализируем после загрузки DOM
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.initGallery());
+        document.addEventListener('DOMContentLoaded', () => this.initGallery())
       } else {
-        this.initGallery();
+        this.initGallery()
       }
     }
 
     initGallery() {
       try {
         // Находим все галереи на странице
-        const galleryElements = document.querySelectorAll('.gallery, .portfolio-grid, [data-gallery]');
-        
+        const galleryElements = document.querySelectorAll(
+          '.gallery, .portfolio-grid, [data-gallery]'
+        )
+
         if (galleryElements.length === 0) {
-          console.log('📷 No gallery elements found on page');
-          return;
+          console.log('📷 No gallery elements found on page')
+          return
         }
 
         // Инициализируем каждую галерею
         galleryElements.forEach((element, index) => {
-          this.initSingleGallery(element, index);
-        });
+          this.initSingleGallery(element, index)
+        })
 
         // Настраиваем обработчики событий
-        this.setupEventListeners();
+        this.setupEventListeners()
 
-        this.isInitialized = true;
-        console.log(`✅ Gallery module initialized with ${galleryElements.length} galleries`);
-
+        this.isInitialized = true
+        console.log(
+          `✅ Gallery module initialized with ${galleryElements.length} galleries`
+        )
       } catch (error) {
-        console.error('❌ Error initializing gallery:', error);
+        console.error('❌ Error initializing gallery:', error)
       }
     }
 
     initSingleGallery(element, index) {
-      const galleryId = `gallery-${index}`;
-      element.setAttribute('data-gallery-id', galleryId);
+      const galleryId = `gallery-${index}`
+      element.setAttribute('data-gallery-id', galleryId)
 
       // Находим все изображения в галерее
-      const images = element.querySelectorAll('img, [data-src]');
-      
+      const images = element.querySelectorAll('img, [data-src]')
+
       const gallery = {
         id: galleryId,
-        element: element,
+        element,
         images: Array.from(images),
         currentIndex: 0,
         isLightboxOpen: false
-      };
+      }
 
       // Обрабатываем каждое изображение
       images.forEach((img, imgIndex) => {
-        img.setAttribute('data-index', imgIndex);
-        img.style.cursor = 'pointer';
-        
-        // Добавляем обработчик клика
-        img.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.openLightbox(gallery, imgIndex);
-        });
-      });
+        img.setAttribute('data-index', imgIndex)
+        img.style.cursor = 'pointer'
 
-      this.galleries.push(gallery);
+        // Добавляем обработчик клика
+        img.addEventListener('click', e => {
+          e.preventDefault()
+          this.openLightbox(gallery, imgIndex)
+        })
+      })
+
+      this.galleries.push(gallery)
     }
 
     setupEventListeners() {
       // Обработчик клавиш для навигации в лайтбоксе
-      document.addEventListener('keydown', (e) => {
+      document.addEventListener('keydown', e => {
         if (this.currentGallery && this.currentGallery.isLightboxOpen) {
           switch (e.key) {
             case 'Escape':
-              this.closeLightbox();
-              break;
+              this.closeLightbox()
+              break
             case 'ArrowLeft':
-              this.previousImage();
-              break;
+              this.previousImage()
+              break
             case 'ArrowRight':
-              this.nextImage();
-              break;
+              this.nextImage()
+              break
           }
         }
-      });
+      })
     }
 
     openLightbox(gallery, imageIndex) {
-      this.currentGallery = gallery;
-      gallery.currentIndex = imageIndex;
-      gallery.isLightboxOpen = true;
+      this.currentGallery = gallery
+      gallery.currentIndex = imageIndex
+      gallery.isLightboxOpen = true
 
       // Создаем элементы лайтбокса если их нет
       if (!document.getElementById('portfolio-lightbox')) {
-        this.createLightboxElements();
+        this.createLightboxElements()
       }
 
       // Показываем лайтбокс
-      this.showLightbox(gallery.images[imageIndex]);
+      this.showLightbox(gallery.images[imageIndex])
     }
 
     createLightboxElements() {
-      const lightbox = document.createElement('div');
-      lightbox.id = 'portfolio-lightbox';
-      lightbox.className = 'lightbox-overlay';
+      const lightbox = document.createElement('div')
+      lightbox.id = 'portfolio-lightbox'
+      lightbox.className = 'lightbox-overlay'
       lightbox.innerHTML = `
         <div class="lightbox-container">
           <button class="lightbox-close" aria-label="Close">&times;</button>
@@ -129,31 +132,37 @@
             <span class="lightbox-counter"></span>
           </div>
         </div>
-      `;
+      `
 
       // Добавляем стили
-      this.addLightboxStyles();
+      this.addLightboxStyles()
 
       // Обработчики событий
-      lightbox.querySelector('.lightbox-close').addEventListener('click', () => this.closeLightbox());
-      lightbox.querySelector('.lightbox-prev').addEventListener('click', () => this.previousImage());
-      lightbox.querySelector('.lightbox-next').addEventListener('click', () => this.nextImage());
-      
-      // Закрытие по клику на оверлей
-      lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-          this.closeLightbox();
-        }
-      });
+      lightbox
+        .querySelector('.lightbox-close')
+        .addEventListener('click', () => this.closeLightbox())
+      lightbox
+        .querySelector('.lightbox-prev')
+        .addEventListener('click', () => this.previousImage())
+      lightbox
+        .querySelector('.lightbox-next')
+        .addEventListener('click', () => this.nextImage())
 
-      document.body.appendChild(lightbox);
+      // Закрытие по клику на оверлей
+      lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) {
+          this.closeLightbox()
+        }
+      })
+
+      document.body.appendChild(lightbox)
     }
 
     addLightboxStyles() {
-      if (document.getElementById('gallery-styles')) return;
+      if (document.getElementById('gallery-styles')) return
 
-      const styles = document.createElement('style');
-      styles.id = 'gallery-styles';
+      const styles = document.createElement('style')
+      styles.id = 'gallery-styles'
       styles.textContent = `
         .lightbox-overlay {
           position: fixed;
@@ -253,58 +262,59 @@
             right: 10px;
           }
         }
-      `;
+      `
 
-      document.head.appendChild(styles);
+      document.head.appendChild(styles)
     }
 
     showLightbox(image) {
-      const lightbox = document.getElementById('portfolio-lightbox');
-      const lightboxImage = lightbox.querySelector('.lightbox-image');
-      const counter = lightbox.querySelector('.lightbox-counter');
+      const lightbox = document.getElementById('portfolio-lightbox')
+      const lightboxImage = lightbox.querySelector('.lightbox-image')
+      const counter = lightbox.querySelector('.lightbox-counter')
 
       // Устанавливаем изображение
-      lightboxImage.src = image.src || image.dataset.src;
-      lightboxImage.alt = image.alt || '';
+      lightboxImage.src = image.src || image.dataset.src
+      lightboxImage.alt = image.alt || ''
 
       // Обновляем счетчик
-      const current = this.currentGallery.currentIndex + 1;
-      const total = this.currentGallery.images.length;
-      counter.textContent = `${current} / ${total}`;
+      const current = this.currentGallery.currentIndex + 1
+      const total = this.currentGallery.images.length
+      counter.textContent = `${current} / ${total}`
 
       // Показываем лайтбокс
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      lightbox.classList.add('active')
+      document.body.style.overflow = 'hidden'
     }
 
     closeLightbox() {
-      const lightbox = document.getElementById('portfolio-lightbox');
+      const lightbox = document.getElementById('portfolio-lightbox')
       if (lightbox) {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-        
+        lightbox.classList.remove('active')
+        document.body.style.overflow = ''
+
         if (this.currentGallery) {
-          this.currentGallery.isLightboxOpen = false;
+          this.currentGallery.isLightboxOpen = false
         }
       }
     }
 
     nextImage() {
-      if (!this.currentGallery) return;
+      if (!this.currentGallery) return
 
-      const gallery = this.currentGallery;
-      gallery.currentIndex = (gallery.currentIndex + 1) % gallery.images.length;
-      this.showLightbox(gallery.images[gallery.currentIndex]);
+      const gallery = this.currentGallery
+      gallery.currentIndex = (gallery.currentIndex + 1) % gallery.images.length
+      this.showLightbox(gallery.images[gallery.currentIndex])
     }
 
     previousImage() {
-      if (!this.currentGallery) return;
+      if (!this.currentGallery) return
 
-      const gallery = this.currentGallery;
-      gallery.currentIndex = gallery.currentIndex === 0 
-        ? gallery.images.length - 1 
-        : gallery.currentIndex - 1;
-      this.showLightbox(gallery.images[gallery.currentIndex]);
+      const gallery = this.currentGallery
+      gallery.currentIndex =
+        gallery.currentIndex === 0
+          ? gallery.images.length - 1
+          : gallery.currentIndex - 1
+      this.showLightbox(gallery.images[gallery.currentIndex])
     }
 
     // Публичные методы
@@ -312,26 +322,25 @@
       // Очистка при необходимости
       this.galleries.forEach(gallery => {
         gallery.images.forEach(img => {
-          img.style.cursor = '';
-        });
-      });
+          img.style.cursor = ''
+        })
+      })
 
-      const lightbox = document.getElementById('portfolio-lightbox');
+      const lightbox = document.getElementById('portfolio-lightbox')
       if (lightbox) {
-        lightbox.remove();
+        lightbox.remove()
       }
 
-      const styles = document.getElementById('gallery-styles');
+      const styles = document.getElementById('gallery-styles')
       if (styles) {
-        styles.remove();
+        styles.remove()
       }
 
-      this.galleries = [];
-      this.currentGallery = null;
+      this.galleries = []
+      this.currentGallery = null
     }
   }
 
   // Экспортируем в глобальную область видимости
-  window.PortfolioGallery = PortfolioGallery;
-
-})(window);
+  window.PortfolioGallery = PortfolioGallery
+})(window)
