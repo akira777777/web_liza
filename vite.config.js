@@ -1,6 +1,6 @@
-import legacy from '@vitejs/plugin-legacy';
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import legacy from '@vitejs/plugin-legacy'
+import { resolve } from 'path'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   root: '.',
@@ -32,17 +32,17 @@ export default defineConfig({
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
         assetFileNames: assetInfo => {
-          const name = assetInfo.fileName || '';
+          const name = assetInfo.fileName || ''
           if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico)$/i.test(name)) {
-            return 'images/[name]-[hash].[ext]';
+            return 'images/[name]-[hash].[ext]'
           }
           if (/\.(woff|woff2|eot|ttf|otf)$/i.test(name)) {
-            return 'fonts/[name]-[hash].[ext]';
+            return 'fonts/[name]-[hash].[ext]'
           }
           if (/\.css$/i.test(name)) {
-            return 'css/[name]-[hash].[ext]';
+            return 'css/[name]-[hash].[ext]'
           }
-          return 'assets/[name]-[hash].[ext]';
+          return 'assets/[name]-[hash].[ext]'
         }
       }
     },
@@ -130,4 +130,4 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString())
   }
-});
+})

@@ -1,4 +1,4 @@
-const { defineConfig, devices } = require('@playwright/test');
+const { defineConfig, devices } = require('@playwright/test')
 
 module.exports = defineConfig({
   // Test directory
@@ -82,4 +82,4 @@ module.exports = defineConfig({
     timeout: 120000,
     reuseExistingServer: !process.env.CI
   }
-});
+})

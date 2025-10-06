@@ -3,42 +3,42 @@
  * Координирует все модули и обеспечивает быструю загрузку
  */
 
-import { CoreModule } from './modules/core.js';
-import { PerformanceModule } from './modules/performance.js';
-import { MediaModule } from './modules/media-optimized.js';
-import { LibraryLoader } from './modules/library-loader.js';
-import { Utils } from './modules/utils.js';
+import { CoreModule } from './modules/core.js'
+import { LibraryLoader } from './modules/library-loader.js'
+import { MediaModule } from './modules/media-optimized.js'
+import { PerformanceModule } from './modules/performance.js'
+import { Utils } from './modules/utils.js'
 
 class PortfolioApp {
   constructor() {
-    this.modules = new Map();
-    this.performance = null;
-    this.loadStartTime = performance.now();
-    this.isInitialized = false;
+    this.modules = new Map()
+    this.performance = null
+    this.loadStartTime = performance.now()
+    this.isInitialized = false
 
-    this.initApp();
+    this.initApp()
   }
 
   async initApp() {
     try {
       // Сначала запускаем Performance Module для мониторинга
-      this.performance = new PerformanceModule();
-      this.modules.set('performance', this.performance);
+      this.performance = new PerformanceModule()
+      this.modules.set('performance', this.performance)
 
       // Детектируем возможности устройства
-      const deviceCapabilities = await this.detectDeviceCapabilities();
+      const deviceCapabilities = await this.detectDeviceCapabilities()
 
       // Инициализируем модули в порядке приоритета
-      await this.initCriticalModules(deviceCapabilities);
+      await this.initCriticalModules(deviceCapabilities)
 
       // Загружаем остальные модули асинхронно
-      this.initSecondaryModules(deviceCapabilities);
+      this.initSecondaryModules(deviceCapabilities)
 
-      this.setupGlobalErrorHandling();
-      this.isInitialized = true;
+      this.setupGlobalErrorHandling()
+      this.isInitialized = true
 
-      const totalTime = performance.now() - this.loadStartTime;
-      this.performance?.recordMetric('appInitTime', totalTime);
+      const totalTime = performance.now() - this.loadStartTime
+      this.performance?.recordMetric('appInitTime', totalTime)
 
       // Отправляем событие готовности
       document.dispatchEvent(
@@ -48,9 +48,9 @@ class PortfolioApp {
             modules: Array.from(this.modules.keys())
           }
         })
-      );
+      )
     } catch (error) {
-      this.handleCriticalError(error);
+      this.handleCriticalError(error)
     }
   }
 
@@ -67,31 +67,31 @@ class PortfolioApp {
       avifSupport: await Utils.checkAVIFSupport(),
       memoryInfo: navigator.deviceMemory || 4,
       connectionType: navigator.connection?.effectiveType || 'unknown'
-    };
+    }
 
     // Сохраняем в localStorage для последующих посещений
-    Utils.saveToStorage('deviceCapabilities', capabilities);
+    Utils.saveToStorage('deviceCapabilities', capabilities)
 
-    return capabilities;
+    return capabilities
   }
 
   /**
    * Инициализация критических модулей
    */
-  async initCriticalModules(capabilities) {
+  async initCriticalModules() {
     // Core Module - всегда нужен
-    const core = new CoreModule();
-    this.modules.set('core', core);
+    const core = new CoreModule()
+    this.modules.set('core', core)
 
     // Library Loader для управления зависимостями
-    const libraryLoader = new LibraryLoader();
-    this.modules.set('libraryLoader', libraryLoader);
-    window.LibraryLoader = libraryLoader;
+    const libraryLoader = new LibraryLoader()
+    this.modules.set('libraryLoader', libraryLoader)
+    window.LibraryLoader = libraryLoader
 
     // Media Module если нужен медиа-контент
     if (this.hasMediaContent()) {
-      const media = new MediaModule();
-      this.modules.set('media', media);
+      const media = new MediaModule()
+      this.modules.set('media', media)
     }
   }
 
@@ -100,32 +100,32 @@ class PortfolioApp {
    */
   async initSecondaryModules(capabilities) {
     // Загружаем модули асинхронно в зависимости от возможностей устройства
-    const modulePromises = [];
+    const modulePromises = []
 
     // Animations - только если устройство поддерживает и пользователь не отключил
     if (
       !capabilities.prefersReducedMotion &&
       capabilities.deviceType === 'desktop'
     ) {
-      modulePromises.push(this.loadModule('animations'));
+      modulePromises.push(this.loadModule('animations'))
     }
 
     // Gallery - если есть галерея на странице
     if (document.querySelector('.gallery, .portfolio-grid')) {
-      modulePromises.push(this.loadModule('gallery'));
+      modulePromises.push(this.loadModule('gallery'))
     }
 
     // Forms - если есть формы
     if (document.querySelector('form')) {
-      modulePromises.push(this.loadModule('forms'));
+      modulePromises.push(this.loadModule('forms'))
     }
 
     // Загружаем все модули параллельно
     try {
-      await Promise.allSettled(modulePromises);
+      await Promise.allSettled(modulePromises)
     } catch (error) {
       // Не критично, продолжаем работу
-      this.performance?.recordError('secondaryModules', error);
+      this.performance?.recordError('secondaryModules', error)
     }
   }
 
@@ -138,18 +138,18 @@ class PortfolioApp {
         animations: () => import('./modules/animations.js'),
         gallery: () => import('./modules/gallery.js'),
         forms: () => import('./modules/forms.js')
-      };
+      }
 
       if (moduleMap[moduleName]) {
-        const moduleClass = await moduleMap[moduleName]();
-        const instance = new moduleClass.default();
-        this.modules.set(moduleName, instance);
+        const moduleClass = await moduleMap[moduleName]()
+        const instance = new moduleClass.default()
+        this.modules.set(moduleName, instance)
 
-        return instance;
+        return instance
       }
     } catch (error) {
-      this.performance?.recordError(`loadModule:${moduleName}`, error);
-      throw error;
+      this.performance?.recordError(`loadModule:${moduleName}`, error)
+      throw error
     }
   }
 
@@ -157,7 +157,7 @@ class PortfolioApp {
    * Проверка наличия медиа-контента
    */
   hasMediaContent() {
-    return document.querySelector('img, video, picture, [data-src]');
+    return document.querySelector('img, video, picture, [data-src]')
   }
 
   /**
@@ -165,24 +165,24 @@ class PortfolioApp {
    */
   setupGlobalErrorHandling() {
     window.addEventListener('error', event => {
-      this.handleError('javascript', event.error);
-    });
+      this.handleError('javascript', event.error)
+    })
 
     window.addEventListener('unhandledrejection', event => {
-      this.handleError('promise', event.reason);
-      event.preventDefault(); // Предотвращаем вывод в консоль
-    });
+      this.handleError('promise', event.reason)
+      event.preventDefault() // Предотвращаем вывод в консоль
+    })
   }
 
   /**
    * Обработка ошибок
    */
   handleError(type, error) {
-    this.performance?.recordError(type, error);
+    this.performance?.recordError(type, error)
 
     // В production можно отправлять в систему мониторинга
     if (process.env.NODE_ENV === 'production') {
-      this.sendErrorToMonitoring(type, error);
+      this.sendErrorToMonitoring(type, error)
     }
   }
 
@@ -191,14 +191,14 @@ class PortfolioApp {
    */
   handleCriticalError(error) {
     // Fallback режим - минимальная функциональность
-    document.body.classList.add('fallback-mode');
+    document.body.classList.add('fallback-mode')
 
     // Создаем уведомление пользователю
     this.showErrorNotification(
       'Some features may not work properly. Please refresh the page.'
-    );
+    )
 
-    this.performance?.recordError('critical', error);
+    this.performance?.recordError('critical', error)
   }
 
   /**
@@ -207,10 +207,10 @@ class PortfolioApp {
   sendErrorToMonitoring(type, error) {
     // Здесь можно интегрировать с Sentry, LogRocket и т.д.
     if (window.gtag) {
-      gtag('event', 'exception', {
+      window.gtag('event', 'exception', {
         description: `${type}: ${error.message || error}`,
         fatal: false
-      });
+      })
     }
   }
 
@@ -224,23 +224,23 @@ class PortfolioApp {
                 <span>${message}</span>
                 <button onclick="this.parentElement.remove()">×</button>
             `
-    });
+    })
 
-    document.body.appendChild(notification);
+    document.body.appendChild(notification)
 
     // Автоудаление через 10 секунд
     setTimeout(() => {
       if (notification.parentElement) {
-        notification.remove();
+        notification.remove()
       }
-    }, 10000);
+    }, 10000)
   }
 
   /**
    * Получение модуля
    */
   getModule(name) {
-    return this.modules.get(name);
+    return this.modules.get(name)
   }
 
   /**
@@ -249,32 +249,32 @@ class PortfolioApp {
   cleanup() {
     this.modules.forEach(module => {
       if (typeof module.cleanup === 'function') {
-        module.cleanup();
+        module.cleanup()
       }
-    });
+    })
 
-    this.modules.clear();
+    this.modules.clear()
   }
 }
 
 // Инициализация приложения
-let app;
+let app
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    app = new PortfolioApp();
-  });
+    app = new PortfolioApp()
+  })
 } else {
-  app = new PortfolioApp();
+  app = new PortfolioApp()
 }
 
 // Экспорт для внешнего использования
-window.PortfolioApp = PortfolioApp;
-window.app = app;
+window.PortfolioApp = PortfolioApp
+window.app = app
 
 // Cleanup при выгрузке страницы
 window.addEventListener('beforeunload', () => {
   if (app) {
-    app.cleanup();
+    app.cleanup()
   }
-});
+})

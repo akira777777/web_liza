@@ -172,7 +172,7 @@
       }
     }
 
-    simulateSubmission(formConfig) {
+    simulateSubmission() {
       return new Promise(resolve => {
         setTimeout(resolve, 1000) // Имитируем задержку сети
       })
@@ -196,7 +196,7 @@
       }
     }
 
-    showMessage(form, message, type) {
+    showMessage(message, type, form = document.body) {
       // Удаляем предыдущие сообщения
       const existingMessage = form.querySelector('.form-message')
       if (existingMessage) {

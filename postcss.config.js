@@ -3,8 +3,8 @@ module.exports = {
     autoprefixer: {
       // Используем конфигурацию из .browserslistrc
       // Автоматически исключаем Internet Explorer
-      remove: true, // Удаляем устаревшие префиксы
+      remove: false, // Сохраняем префиксы для совместимости
       cascade: false // Более читаемый вывод
     }
   }
-};
+}

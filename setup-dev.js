@@ -5,36 +5,35 @@
  * Автоматическая настройка окружения разработки
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require('fs')
+const { execSync } = require('child_process')
 
-console.log('🚀 Setting up enhanced development environment...');
+console.log('🚀 Setting up enhanced development environment...')
 
 // Check if we're in the right directory
 if (!fs.existsSync('package.json')) {
-  console.error('❌ Please run this script from the project root directory');
-  process.exit(1);
+  console.error('❌ Please run this script from the project root directory')
+  process.exit(1)
 }
 
 // Install dependencies if needed
 try {
-  console.log('📦 Installing dependencies...');
-  execSync('npm install', { stdio: 'inherit' });
-  console.log('✅ Dependencies installed');
+  console.log('📦 Installing dependencies...')
+  execSync('npm install', { stdio: 'inherit' })
+  console.log('✅ Dependencies installed')
 } catch (error) {
-  console.warn('⚠️ Some dependencies may have failed to install');
+  console.warn('⚠️ Some dependencies may have failed to install')
 }
 
 // Create necessary directories
-const directories = ['reports', 'dist', 'temp', '.vscode'];
+const directories = ['reports', 'dist', 'temp', '.vscode']
 
 directories.forEach(dir => {
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-    console.log(`📁 Created directory: ${dir}`);
+    fs.mkdirSync(dir, { recursive: true })
+    console.log(`📁 Created directory: ${dir}`)
   }
-});
+})
 
 // Create VS Code settings
 const vscodeSettings = {
@@ -50,13 +49,13 @@ const vscodeSettings = {
   'emmet.includeLanguages': {
     javascript: 'jsx'
   }
-};
+}
 
 fs.writeFileSync(
   '.vscode/settings.json',
   JSON.stringify(vscodeSettings, null, 2)
-);
-console.log('⚙️ VS Code settings configured');
+)
+console.log('⚙️ VS Code settings configured')
 
 // Create launch configuration for debugging
 const launchConfig = {
@@ -71,10 +70,10 @@ const launchConfig = {
       sourceMaps: true
     }
   ]
-};
+}
 
-fs.writeFileSync('.vscode/launch.json', JSON.stringify(launchConfig, null, 2));
-console.log('🐛 Debug configuration created');
+fs.writeFileSync('.vscode/launch.json', JSON.stringify(launchConfig, null, 2))
+console.log('🐛 Debug configuration created')
 
 // Create development tasks
 const tasks = {
@@ -106,10 +105,10 @@ const tasks = {
       problemMatcher: []
     }
   ]
-};
+}
 
-fs.writeFileSync('.vscode/tasks.json', JSON.stringify(tasks, null, 2));
-console.log('📋 VS Code tasks configured');
+fs.writeFileSync('.vscode/tasks.json', JSON.stringify(tasks, null, 2))
+console.log('📋 VS Code tasks configured')
 
 // Create environment file template
 const envTemplate = `# Environment Configuration
@@ -126,11 +125,11 @@ MEMORY_THRESHOLD=50
 # Development flags
 DEBUG_MODE=true
 VERBOSE_LOGGING=false
-`;
+`
 
 if (!fs.existsSync('.env')) {
-  fs.writeFileSync('.env', envTemplate);
-  console.log('🌍 Environment template created');
+  fs.writeFileSync('.env', envTemplate)
+  console.log('🌍 Environment template created')
 }
 
 // Create .gitignore additions
@@ -159,18 +158,18 @@ Thumbs.db
 *.log
 npm-debug.log*
 yarn-debug.log*
-`;
+`
 
-const gitignorePath = '.gitignore';
-let gitignoreContent = '';
+const gitignorePath = '.gitignore'
+let gitignoreContent = ''
 
 if (fs.existsSync(gitignorePath)) {
-  gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
+  gitignoreContent = fs.readFileSync(gitignorePath, 'utf8')
 }
 
 if (!gitignoreContent.includes('# Development')) {
-  fs.appendFileSync(gitignorePath, gitignoreAdditions);
-  console.log('📝 Updated .gitignore');
+  fs.appendFileSync(gitignorePath, gitignoreAdditions)
+  console.log('📝 Updated .gitignore')
 }
 
 // Create development documentation
@@ -230,13 +229,13 @@ npm run test:ui  # Interactive mode
 
 Use VS Code's built-in debugger with the "Launch Chrome" configuration
 to debug JavaScript in the browser with source maps.
-`;
+`
 
-fs.writeFileSync('DEVELOPMENT.md', devDocs);
-console.log('📚 Development documentation created');
+fs.writeFileSync('DEVELOPMENT.md', devDocs)
+console.log('📚 Development documentation created')
 
 // Validate setup
-console.log('\n🔍 Validating setup...');
+console.log('\n🔍 Validating setup...')
 
 const validations = [
   { file: 'package.json', required: true },
@@ -246,32 +245,32 @@ const validations = [
   { file: 'modules/core.js', required: true },
   { file: 'modules/performance.js', required: true },
   { file: 'sw.js', required: true }
-];
+]
 
-let allValid = true;
+let allValid = true
 
 validations.forEach(({ file, required }) => {
-  const exists = fs.existsSync(file);
-  const status = exists ? '✅' : required ? '❌' : '⚠️';
-  console.log(`${status} ${file}`);
+  const exists = fs.existsSync(file)
+  const status = exists ? '✅' : required ? '❌' : '⚠️'
+  console.log(`${status} ${file}`)
 
   if (required && !exists) {
-    allValid = false;
+    allValid = false
   }
-});
+})
 
 if (allValid) {
-  console.log('\n🎉 Setup completed successfully!');
-  console.log('\nNext steps:');
-  console.log('1. Run "npm run dev" to start development server');
-  console.log('2. Open http://localhost:3000');
-  console.log('3. Start coding! 🚀');
+  console.log('\n🎉 Setup completed successfully!')
+  console.log('\nNext steps:')
+  console.log('1. Run "npm run dev" to start development server')
+  console.log('2. Open http://localhost:3000')
+  console.log('3. Start coding! 🚀')
 } else {
-  console.log('\n⚠️ Setup completed with warnings');
-  console.log('Please check missing required files above');
+  console.log('\n⚠️ Setup completed with warnings')
+  console.log('Please check missing required files above')
 }
 
 // Performance tip
 console.log(
   '\n💡 Pro tip: Use Ctrl+Shift+P in VS Code and search for "Tasks: Run Task" to quickly access development commands'
-);
+)

@@ -4,7 +4,7 @@
       "type": "msedge",
       "name": "Launch Microsoft Edge",
       "request": "launch",
-      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "runtimeArgs": ["--remote-debugging-port=3001"],
       "url": "http://localhost:3001", // Use your Vite dev server URL for debugging your project
       "presentation": {
         "hidden": true
