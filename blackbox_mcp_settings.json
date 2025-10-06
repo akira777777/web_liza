@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "github.com/campfirein/cipher": {
+      "type": "stdio",
+      "command": "cipher",
+      "args": ["--mode", "mcp"],
+      "env": {
+        "MCP_SERVER_MODE": "aggregator"
+      }
+    }
+  }
+}

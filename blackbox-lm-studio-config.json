@@ -1,0 +1,51 @@
+{
+  "provider": "lm-studio",
+  "baseURL": "http://127.0.0.1:59644",
+  "apiKey": "lm-studio",
+  "model": "mistral-7b-instruct-v0.3",
+  "contextLength": 32768,
+  "temperature": 0.7,
+  "maxTokens": 4096,
+  "timeout": 120000,
+  "streamResponse": true,
+  "notes": {
+    "contextLength": "Set to match your model's maximum context. Minimum 16384 for Blackbox AI. Recommended: 32768 or higher.",
+    "model": "Replace with your actual loaded model name from LM Studio",
+    "temperature": "0.7 is balanced. Lower (0.3-0.5) for more focused responses, higher (0.8-1.0) for more creative",
+    "maxTokens": "Maximum tokens in response. 4096 is good for most tasks",
+    "timeout": "120 seconds timeout for long responses"
+  },
+  "recommendedModels": [
+    {
+      "name": "Mistral 7B Instruct v0.3",
+      "contextLength": 131072,
+      "vramRequired": "6-8GB",
+      "recommended": true
+    },
+    {
+      "name": "Llama 3 8B Instruct",
+      "contextLength": 131072,
+      "vramRequired": "8-10GB",
+      "recommended": true
+    },
+    {
+      "name": "OpenHermes 2.5 Mistral 7B",
+      "contextLength": 32768,
+      "vramRequired": "6-8GB",
+      "recommended": true
+    },
+    {
+      "name": "Yi 34B Chat",
+      "contextLength": 200000,
+      "vramRequired": "20GB+",
+      "recommended": false,
+      "note": "High-end systems only"
+    }
+  ],
+  "troubleshooting": {
+    "contextLengthError": "Increase contextLength to at least 16384, preferably 32768+",
+    "connectionError": "Ensure LM Studio server is running on port 1234",
+    "slowResponses": "Reduce contextLength or use a smaller model",
+    "outOfMemory": "Reduce GPU layers in LM Studio or use smaller model"
+  }
+}
