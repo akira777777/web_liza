@@ -123,6 +123,7 @@
     align-items: center;
     padding: 2rem;
     gap: 2rem;
+    -webkit-transition: left 0.3s ease;
     transition: left 0.3s ease;
     border-top: 1px solid var(--color-gray-200);
     z-index: 999;
@@ -256,8 +257,10 @@
   /* Lightbox adjustments */
   .lightbox-prev,
   .lightbox-next {
-    top: auto;
+    top: initial;
     bottom: 20px;
+    -webkit-transform: none;
+    -ms-transform: none;
     transform: none;
     padding: 15px;
     font-size: 1.5rem;
@@ -343,7 +346,7 @@
   /* Hero Section */
   .hero {
     padding: 5rem 0 3rem;
-    min-height: auto;
+    min-height: initial;
   }
 
   .hero-content {
@@ -558,10 +561,12 @@
   }
 
   .hero-image {
+    -webkit-animation: none;
     animation: none;
   }
 
   .scroll-down .scroll-line {
+    -webkit-animation: none;
     animation: none;
   }
 }
@@ -598,7 +603,7 @@
   }
 
   .hero {
-    min-height: auto;
+    min-height: initial;
     padding: 2rem 0;
   }
 
@@ -635,14 +640,19 @@
 /* Optimize for low-end devices */
 @media (width <= 768px) and (resolution <= 1dppx) {
   .portfolio-item:hover {
+    -webkit-transform: none;
+    -ms-transform: none;
     transform: none;
   }
 
   .service-item:hover {
+    -webkit-transform: none;
+    -ms-transform: none;
     transform: none;
   }
 
   .hero-image {
+    -webkit-animation: none;
     animation: none;
   }
 
