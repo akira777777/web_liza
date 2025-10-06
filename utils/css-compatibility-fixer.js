@@ -181,16 +181,28 @@ class CSSCompatibilityFixer {
 
       // 2. Добавляем браузерные префиксы где необходимо
       for (const [property, prefixes] of Object.entries(this.browserPrefixes)) {
-        // Ищем свойство без префикса
-        const propertyRegex = new RegExp(`(^|\\n)(\\s*)${property}\\s*:\\s*([^;]+);`, 'gm');
+        // Ищем свойство без префикса (поддерживаем многострочные значения)
+        const propertyRegex = new RegExp(
+          `(^|\\n)(\\s*)${property}\\s*:\\s*([^;]+(?:\\n[^;]*)*);`,
+          'gm'
+        );
+
         let modified = false;
         let addedCount = 0;
+        const processedPositions = new Set();
 
         content = content.replace(propertyRegex, (match, lineStart, indent, value) => {
+          const matchPosition = content.indexOf(match);
+
+          // Избегаем повторной обработки одного и того же свойства
+          if (processedPositions.has(matchPosition)) {
+            return match;
+          }
+
           // Проверяем, есть ли уже хотя бы один префикс для этого свойства рядом
-          const beforeMatch = content.substring(0, content.indexOf(match));
+          const beforeMatch = content.substring(0, matchPosition);
           const lines = beforeMatch.split('\n');
-          const contextLines = lines.slice(-3); // Проверяем предыдущие 3 строки
+          const contextLines = lines.slice(-5); // Проверяем предыдущие 5 строк
 
           // Если уже есть префикс, не добавляем снова
           const hasPrefixNearby = prefixes.some(prefix =>
@@ -208,6 +220,7 @@ class CSSCompatibilityFixer {
 
           modified = true;
           addedCount++;
+          processedPositions.add(matchPosition);
 
           return `${prefixedProps}\n${indent}${property}: ${value};`;
         });
